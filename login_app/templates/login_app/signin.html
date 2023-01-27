@@ -1,0 +1,11 @@
+<h1>Signin</h1>
+
+{{error}}
+
+<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button>
+        Signin
+    </button>
+</form>
