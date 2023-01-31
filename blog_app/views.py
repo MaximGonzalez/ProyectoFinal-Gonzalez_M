@@ -1,7 +1,8 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.db.models import Q
 from django.urls import reverse
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from django.db.models import Q
 from blog_app.models import *
 from blog_app.forms import *
 
@@ -19,7 +20,7 @@ def inicio(request):
 
 
 def usuarios(request):
-    contexto = {'usuarios' : Usuario.objects.all()}
+    contexto = {'users': User.objects.all()}
     return render(
         request=request,
         template_name='blog_app/usuarios.html',
@@ -29,7 +30,7 @@ def usuarios(request):
 
 
 def posteos(request):
-    contexto = {'posteos' : Post.objects.all()}
+    contexto = {'posteos' :Post.objects.order_by('-fecha_publicacion')}
     return render(
         request=request,
         template_name='blog_app/posteos.html',
@@ -48,9 +49,9 @@ def comentarios(request):
 
 
 
-def crear_posteos(request):
+def crear_posteo(request):
     if request.method == 'GET':
-        contexto = {'formulario_post' : Crear_posteo}
+        contexto = {'form' : Crear_posteo}
         return render(
         request,
         template_name='blog_app/crear_post.html',
@@ -59,7 +60,7 @@ def crear_posteos(request):
     else:
         print(request.POST)
         Post.objects.create(titulo = request.POST["titulo"], contenido = request.POST["contenido"])
-        contexto = {'formulario_post' : Crear_posteo}
+        contexto = {'form' : Crear_posteo}
         return render(
         request,
         template_name='blog_app/crear_post.html',
@@ -110,20 +111,23 @@ def crear_posteos(request):
 
 
 def buscar_posteos(request):
-    if request.method == 'GET':
-        return render(
-        request,
-        template_name='blog_app/crear_post.html',
-        )
-    else:
+    if request.method == 'POST':
         print(request.POST)
         data = request.POST
-        posteos = Post.objects.filter(titulo__contains=data['titulo'])
-        contexto = {'posteos' : posteos}
+        posteos = Post.objects.filter(
+            Q(titulo__contains=data['busqueda'].lower())
+            | Q(contenido__contains=data['busqueda'].lower())
+            )
+        if posteos.exists():
+            print(posteos)
+            contexto = {'posteos' : posteos}
+        else:
+            print(posteos)
+            contexto = {'mensaje': 'No hay resultados'}
         return render(
-        request,
+        request=request,
         template_name='blog_app/buscar_posteos.html',
-        context=contexto
+        context=contexto,
         )
 
 

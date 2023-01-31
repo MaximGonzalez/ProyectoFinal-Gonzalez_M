@@ -1,6 +1,7 @@
 from django import forms
 from datetime import date
 from blog_app.models import Usuario, Post
+from ckeditor.widgets import CKEditorWidget
 
 
 class Crear_usuario(forms.Form):
@@ -13,7 +14,7 @@ class Crear_usuario(forms.Form):
 
 class Crear_posteo(forms.Form):
     titulo = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Ingrese el título'}), max_length=64)
-    contenido = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Ingrese el contenido'}), max_length=256)
+    contenido = forms.CharField(widget=CKEditorWidget(attrs={'placeholder': 'Ingrese el contenido'}), max_length=256)
     usuario = forms.ModelChoiceField(queryset=Usuario.objects.all())
 
 

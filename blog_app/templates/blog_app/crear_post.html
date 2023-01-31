@@ -15,9 +15,8 @@
                     <form method="POST">
                         {% csrf_token %}
                         <h5 class="text-white-75 mb-5">Seleccione su usuario</h5>
-                        {{formulario_post.usuario}}<hr>
-                        {{formulario_post.titulo}}<hr>
-                        {{formulario_post.contenido}}<hr>
+                        {{form.media}}
+                        {{form.as_p}}
                         <button>
                             Crear
                         </button>

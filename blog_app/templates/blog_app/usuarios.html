@@ -26,9 +26,9 @@
             <tr>
                 <th>Usuarios</th>
             </tr>
-                {% for usuario in usuarios %}
+                {% for user in users %}
                 <tr>
-                    <td>Username: {{usuario.usuario}}<br>
+                    <td>Username: {{user.username}}<br>
                     </td>
                 </tr>
                 {% endfor %}
@@ -36,3 +36,4 @@
     </table>
 </section>
 {% endblock posteos %}
+

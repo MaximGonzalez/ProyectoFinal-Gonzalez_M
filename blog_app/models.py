@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from datetime import datetime
-
+#from ckeditor.fields import RichTextUploadingField
 
 # Create your models here.
 class Usuario(models.Model):
@@ -18,7 +17,8 @@ class Usuario(models.Model):
 
 class Post(models.Model):
     titulo = models.CharField(max_length=64)
-    contenido = models.TextField()
+    #contenido = RichTextUploadingField(blank=True, null=True)
+    contenido = models.CharField(max_length=64, null=True)
     fecha_publicacion = models.DateTimeField(default=timezone.now)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, default='1')
 
