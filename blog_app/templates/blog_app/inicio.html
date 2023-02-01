@@ -2,22 +2,19 @@
 
 
 
-{% block contenido %}
-
-{% endblock contenido %}
 
 {% block posteos %}
-<main class="container py-5">
-    <section class="card cad-body">
+    <main class="container py-5">
         {% for post in posteos reversed %}
-        <hr class="divider" />
-            <tr>
-                <td>{{post.titulo}}<br>
-                    {{post.contenido|safe}}<br>
-                    Autor: {{post.usuario}} - {{post.fecha_publicacion}}
-                </td>
-            </tr>
+        <section class="card cad-body">
+                        <li>
+                            {{post.titulo}}
+                            {{post.contenido|safe}}
+                            Autor: {{post.usuario}} - {{post.fecha_publicacion}}
+                        </li>
+                    {% empty %}
+                    <h1 class="text-center">No se encontraron entradas.</h1>
+        </section>
         {% endfor %}
-    </section>
-</main>
-{% endblock posteos %}
+    </main>
+{% endblock %}

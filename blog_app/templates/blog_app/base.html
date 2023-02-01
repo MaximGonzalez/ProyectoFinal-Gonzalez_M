@@ -20,7 +20,7 @@
     {% block head %}
     <body id="page-top">
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg fixed-top bg-body-tertiary bg-dark navbar-dark">
+        <nav class="navbar navbar-expand sticky-xxl-top bg-dark navbar-dark">
             <div class="container">
               <a class="navbar-brand">Blog</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,13 +31,32 @@
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="{% url 'inicio' %}">Inicio</a>
                     </li>
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                      <a class="nav-link" href="{% url 'usuarios' %}">Usuarios</a>
+                      <a class="nav-link" href="{% url 'post' %}">Mis post</a>
                     </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                      <a class="nav-link" href="{% url 'posteos' %}">Posteos</a>
+                      <a class="nav-link" href="{% url 'usuarios' %}">{{user}}</a>
                     </li>
-                  </ul>
+                    {% endif %}
+                    {% if user.is_anonymous %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'signup_user' %}">Registrarse</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_anonymous %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'signin_user' %}">Ingresar</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'signout_user' %}">Logout</a>
+                    </li>
+                    {% endif %}
+                </ul>
                   <form class="d-flex" role="search" action="{% url 'buscar_posteos' %}" method="POST">
                     {% csrf_token %}
                     <input type="text" name="busqueda">
@@ -59,7 +78,7 @@
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-lg-8 col-xl-6 text-center">
-                        <h2 class="mt-0">Estamos en contacto!</h2>
+                        <h2 class="mt-0">Contacto</h2>
                         <hr class="divider" />
                         <p class="text-muted mb-5"></p>
                     </div>
@@ -73,7 +92,7 @@
         </section>
         <!-- Footer-->
         <footer class="bg-light py-5">
-            <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2022 - Maximiliano Gonzalez</div></div>
+            <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2023 - Maximiliano Gonzalez</div></div>
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -30,7 +31,7 @@ def signup_user(request):
                 'error': 'La contrasenia no coincide.',
             })
 
-
+@login_required
 def signout_user(request):
     logout(request)
     return redirect('/')

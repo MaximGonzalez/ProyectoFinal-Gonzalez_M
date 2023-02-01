@@ -1,0 +1,37 @@
+{% extends "blog_app/base.html" %}
+
+
+
+{% block contenido %}
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Titulo</th>
+            <th>Fecha</th>
+            <td></td>
+        </tr>
+        {% for posteos in post reversed %}
+        <tr>
+            <td>
+                <a href="{% url 'post_detalle' post_id=posteos.id %}">
+                    Titulo: {{posteos.titulo}}
+                </a>
+            </td>
+            <td>
+                {{posteos.fecha_publicacion}}
+            </td>
+            <td>
+                <form action="{% url 'borrar_post' post_id=posteos.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="eliminar"/>
+                </form
+            </td>
+            <td>
+                {% empty %}
+                <h1 class="text-center">No se encontraron entradas.</h1>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock contenido %}

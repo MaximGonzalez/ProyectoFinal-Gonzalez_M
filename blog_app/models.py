@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 from django.utils import timezone
-#from ckeditor.fields import RichTextUploadingField
 
 # Create your models here.
 class Usuario(models.Model):
@@ -17,13 +18,12 @@ class Usuario(models.Model):
 
 class Post(models.Model):
     titulo = models.CharField(max_length=64)
-    #contenido = RichTextUploadingField(blank=True, null=True)
-    contenido = models.CharField(max_length=64, null=True)
-    fecha_publicacion = models.DateTimeField(default=timezone.now)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, default='1')
+    contenido = RichTextField(blank=True, null=True)
+    fecha_publicacion = models.DateTimeField(auto_now_add=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.titulo}"
+        return f"{self.titulo} | De: {self.usuario}"
 
 class Comentario(models.Model):
     texto = models.CharField(max_length=256)

@@ -1,11 +1,31 @@
-<h1>Signin</h1>
+{% extends "blog_app/base.html" %}
+
+
+
+
+{% block contenido %}
+<main class="container h-50 align-items-center">
+    <div class="row">
+        <div class="col-md-4 offset-md-4 mt-5">
+            <h1 class="text-center">Login</h1>
+                {{error}}
+            <form method="POST" class="card card-body">
+                {% csrf_token %}
+                <div class="m-3">
+                    <label for="username">Usuario:</label>
+                    <input type="text" name="username" id="username" class="form-control" placeholder="ingrese su usuario">
+                </div>
+                <div class="m-3">
+                    <label for="password">Contrasena:</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="ingrese su contrasena">
+                </div>
+                <button class="btn btn-secondary">
+                    Ingresar
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
 
 {{error}}
-
-<form method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button>
-        Signin
-    </button>
-</form>
+{% endblock contenido %}

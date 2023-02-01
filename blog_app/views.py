@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from blog_app.models import *
-from blog_app.forms import *
+from blog_app.models import Post
+from blog_app.forms import Crear_post_form
 
 # Create your views here.
+
 
 
 def inicio(request):
@@ -18,7 +19,7 @@ def inicio(request):
     )
 
 
-
+@login_required
 def usuarios(request):
     contexto = {'users': User.objects.all()}
     return render(
@@ -28,89 +29,63 @@ def usuarios(request):
     )
 
 
-
-def posteos(request):
-    contexto = {'posteos' :Post.objects.order_by('-fecha_publicacion')}
+@login_required
+def post(request):
+    post = Post.objects.filter(usuario=request.user)
+    contexto = {'post':post}
     return render(
-        request=request,
-        template_name='blog_app/posteos.html',
+        request,
+        'blog_app/post.html',
         context=contexto,
     )
 
 
 
-def comentarios(request):
-    contexto = {'comentarios' : Comentario.objects.all()}
-    return render(
-        request=request,
-        template_name='blog_app/comentarios.html',
-        context=contexto,
-    )
-
-
-
-def crear_posteo(request):
+@login_required
+def crear_post(request):
     if request.method == 'GET':
-        contexto = {'form' : Crear_posteo}
         return render(
-        request,
-        template_name='blog_app/crear_post.html',
-        context=contexto
-        )
+            request, 'blog_app/crear_post.html', {
+                'form': Crear_post_form,
+            })
     else:
-        print(request.POST)
-        Post.objects.create(titulo = request.POST["titulo"], contenido = request.POST["contenido"])
-        contexto = {'form' : Crear_posteo}
-        return render(
-        request,
-        template_name='blog_app/crear_post.html',
-        context=contexto
-        )
+        try:
+            form = Crear_post_form(request.POST)
+            nuevo_post = form.save(commit=False)
+            nuevo_post.usuario = request.user
+            nuevo_post.save()
+            return redirect('/')
+        except ValueError:
+            return render(
+            request, 'blog_app/crear_post.html', {
+                'form': Crear_post_form,
+                'error':'Datos invalidos, ingrese nuevamente los datos del post'
+            })
 
 
 
-def crear_usuarios(request):
+@login_required
+def post_detalle(request, post_id):
     if request.method == 'GET':
-        contexto = {'formulario_usuario' : Crear_usuario}
-        return render(
-        request,
-        template_name='blog_app/crear_usuario.html',
-        context=contexto
-        )
+        detalle = get_object_or_404(Post, pk=post_id, usuario=request.user)
+        form_upd = Crear_post_form(instance=detalle)
+        return render(request, 'blog_app/post_detalle.html', {'detalle':detalle, 'form_upd' : form_upd})
     else:
-        print(request.POST)
-        form = Crear_usuario(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            usuario = Usuario(usuario = data["usuario"], contrasenia = data["contrasenia"], mail = data["mail"], nombre = data["nombre"], apellido = data["apellido"], fecha_nacimiento = data['fecha_nacimiento'])
-            usuario.save()
-            url_exitosa = reverse('usuarios')
-        return redirect(url_exitosa)
+        try:
+            detalle = get_object_or_404(Post, pk=post_id, usuario=request.user)
+            form = Crear_post_form(request.POST, instance=detalle)
+            form.save()
+            return redirect('post')
+        except ValueError:
+            return render(request, 'blog_app/post_detalle.html',
+            {'detalle':detalle,
+            'form_upd' : form_upd,
+            'error' : 'Error al actualizar el post'
+            })
 
 
 
-def crear_posteos(request):
-    if request.method == 'GET':
-        contexto = {'formulario_post' : Crear_posteo}
-        return render(
-        request,
-        template_name='blog_app/crear_post.html',
-        context=contexto
-        )
-    else:
-        print(request.POST)
-        formulario = Crear_posteo(request.POST)
-
-        if formulario.is_valid():
-            data = formulario.cleaned_data
-            posteo = Post(titulo = data["titulo"], contenido = data["contenido"], usuario = data["usuario"])
-            posteo.save()
-            url_exitosa = reverse('inicio')
-        return redirect(url_exitosa)
-
-
-
-def buscar_posteos(request):
+def buscar_posteo(request):
     if request.method == 'POST':
         print(request.POST)
         data = request.POST
@@ -132,6 +107,15 @@ def buscar_posteos(request):
 
 
 
+def borrar_post(request, post_id):
+    borrar = get_object_or_404(Post, pk=post_id, usuario=request.user)
+    if request.method == 'POST':
+        borrar.delete()
+        return redirect('post')
+
+
+
+""" @login_required
 def crear_comentario(request):
     if request.method == 'GET':
         contexto = {'formulario_comentario' : Crear_comentario}
@@ -149,4 +133,15 @@ def crear_comentario(request):
             comentario = Comentario(texto = data["texto"])
             comentario.save()
             url_exitosa = reverse('inicio')
-        return redirect(url_exitosa)
+        return redirect(url_exitosa) """
+
+
+
+""" def comentarios(request):
+    contexto = {'comentarios' : Comentario.objects.all()}
+    return render(
+        request=request,
+        template_name='blog_app/comentarios.html',
+        context=contexto,
+    ) """
+
