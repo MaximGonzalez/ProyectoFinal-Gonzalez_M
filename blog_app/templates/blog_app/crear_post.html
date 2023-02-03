@@ -3,15 +3,21 @@
 
 
 {% block contenido %}
-    <main class="container py-5">
+    <main class="container py-5 align-items-center">
+        <h1 class="text-center display-3">Crear post</h1>
         <section class="card cad-body">
-            <h1>Crear post</h1>
             {{error}}
                 <form method="POST">
                     {% csrf_token %}
-                    {{form.as_p}}
-                    {{form.media}}
-                    <button>
+                    <div>
+                        <h5 class="te">Titulo</h5>
+                        {{form.titulo}}
+                    </div>
+                    <div>
+                        {{form.contenido}}
+                        {{form.media}}
+                    </div>
+                    <button class="btn btn-outline-success">
                         Crear
                     </button>
                 </form>

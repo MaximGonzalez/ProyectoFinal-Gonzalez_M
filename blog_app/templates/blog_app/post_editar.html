@@ -1,0 +1,26 @@
+{% extends "blog_app/base.html" %}
+
+
+
+{% block contenido %}
+<main class="container py-5">
+    <section class="card cad-body">
+        <h1 class="text-center">{{original.titulo}}</h1>
+    </section>
+    <section class="card cad-body">
+        <div>
+            <ul>
+                <h1 class="text-center"> {{error}} </h1>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{form_edit.as_p}}
+                    {{form_edit.media}}
+                    <button>
+                        Update
+                    </button>
+                </form>
+            </ul>
+        </div>
+    </section>
+</main>
+{% endblock contenido %}

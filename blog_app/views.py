@@ -3,8 +3,8 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from blog_app.models import Post
-from blog_app.forms import Crear_post_form
+from blog_app.models import Post, Comentario
+from blog_app.forms import Crear_post_form, Crear_comentario_form
 
 # Create your views here.
 
@@ -18,7 +18,6 @@ def inicio(request):
         context=contexto,
     )
 
-
 @login_required
 def usuarios(request):
     contexto = {'users': User.objects.all()}
@@ -27,7 +26,6 @@ def usuarios(request):
         template_name='blog_app/usuarios.html',
         context=contexto,
     )
-
 
 @login_required
 def post(request):
@@ -38,7 +36,6 @@ def post(request):
         'blog_app/post.html',
         context=contexto,
     )
-
 
 
 @login_required
@@ -63,26 +60,46 @@ def crear_post(request):
             })
 
 
-
 @login_required
-def post_detalle(request, post_id):
+def post_editar(request, post_id):
     if request.method == 'GET':
-        detalle = get_object_or_404(Post, pk=post_id, usuario=request.user)
-        form_upd = Crear_post_form(instance=detalle)
-        return render(request, 'blog_app/post_detalle.html', {'detalle':detalle, 'form_upd' : form_upd})
+        original = get_object_or_404(Post, pk=post_id, usuario=request.user)
+        form_edit = Crear_post_form(instance=original)
+        return render(request, 'blog_app/post_editar.html', {'original':original, 'form_edit':form_edit})
     else:
         try:
-            detalle = get_object_or_404(Post, pk=post_id, usuario=request.user)
-            form = Crear_post_form(request.POST, instance=detalle)
-            form.save()
+            original = get_object_or_404(Post, pk=post_id, usuario=request.user)
+            form_edit = Crear_post_form(request.POST, instance=original)
+            form_edit.save()
             return redirect('post')
         except ValueError:
-            return render(request, 'blog_app/post_detalle.html',
-            {'detalle':detalle,
-            'form_upd' : form_upd,
+            return render(request, 'blog_app/post_editar.html',
+            {'original':original,
+            'form_edit' : form_edit,
             'error' : 'Error al actualizar el post'
             })
 
+
+@login_required
+def post_detalle(request, post_id):
+    comentarios = []
+    if request.method == 'GET':
+        posteo = get_object_or_404(Post, pk=post_id)
+        comentarios = posteo.comentario_set.all()
+        return render(request, 'blog_app/post_detalle.html', {'posteo':posteo, 'form':Crear_comentario_form, 'comentarios': comentarios})
+    else:
+        try:
+            print(request.POST)
+            form = Crear_comentario_form(request.POST)
+            nuevo_coment = form.save(commit=False)
+            nuevo_coment.autor = request.user
+            nuevo_coment.post = Post.objects.get(id=post_id)
+            nuevo_coment.save()
+            comentarios = posteo.comentario_set.all()
+            return render(request, 'blog_app/post_detalle.html', {'posteo':posteo, 'form':Crear_comentario_form, 'comentarios': comentarios})
+        except:
+            posteo = get_object_or_404(Post, pk=post_id)
+            return render(request, 'blog_app/post_detalle.html', {'posteo':posteo, 'form':Crear_comentario_form, 'comentarios': comentarios, 'error':'Error al dejar su comentario'})
 
 
 def buscar_posteo(request):
@@ -106,42 +123,10 @@ def buscar_posteo(request):
         )
 
 
-
+@login_required
 def borrar_post(request, post_id):
     borrar = get_object_or_404(Post, pk=post_id, usuario=request.user)
     if request.method == 'POST':
         borrar.delete()
         return redirect('post')
-
-
-
-""" @login_required
-def crear_comentario(request):
-    if request.method == 'GET':
-        contexto = {'formulario_comentario' : Crear_comentario}
-        return render(
-        request,
-        template_name='blog_app/crear_comentario.html',
-        context=contexto
-        )
-    else:
-        print(request.POST)
-        formulario = Crear_comentario(request.POST)
-
-        if formulario.is_valid():
-            data = formulario.cleaned_data
-            comentario = Comentario(texto = data["texto"])
-            comentario.save()
-            url_exitosa = reverse('inicio')
-        return redirect(url_exitosa) """
-
-
-
-""" def comentarios(request):
-    contexto = {'comentarios' : Comentario.objects.all()}
-    return render(
-        request=request,
-        template_name='blog_app/comentarios.html',
-        context=contexto,
-    ) """
 

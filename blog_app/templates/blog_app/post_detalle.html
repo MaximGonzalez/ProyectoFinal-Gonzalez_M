@@ -5,26 +5,41 @@
 {% block contenido %}
 <main class="container py-5">
     <section class="card cad-body">
+        <h1 class="text-center">
+            Vista Post detalle
+        </h1>
+    </section>
+    <section class="card cad-body">
         <div>
-            <h1 class="text-center"> {{error}} </h1>
-        <h1 class="text-center">Post original</h1>
+        <h1 class="text-center"> {{error}} </h1>
         <li>
-            {{detalle.titulo}}
-            {{detalle.contenido|safe}}
-            Autor: {{detalle.usuario}} - {{detalle.fecha_publicacion}}
+            {{posteo.titulo}}
+            {{posteo.contenido|safe}}
+            Autor: {{posteo.usuario}} - {{detalle.fecha_publicacion}}
         </li>
         </div>
-        <div>
-            <h1 class="text-center">Editar</h1>
+    </section>
+    <section class="card cad-body">
+        <h3>Deja tu comentario</h3>
         <form method="POST">
             {% csrf_token %}
-            {{form_upd.as_p}}
-            {{form_upd.media}}
-            <button>
-                Update
+            {{form.comentario}}
+            {{form.media}}
+            <button class="btn btn-outline-success">
+                Enviar
             </button>
         </form>
-        </div>
+    </section>
+    <section class="card cad-body">
+        {% for comentario in comentarios reversed %}
+            <section class="card cad-body">
+                <div class="comment">
+                    <p class="comment-author">{{ comentario.autor }}</p>
+                    <p class="comment-date">{{ comentario.fecha_publicacion }}</p>
+                    <p class="comment-content">{{ comentario.comentario|safe }}</p>
+                </div>
+            </section>
+        {% endfor %}
     </section>
 </main>
 {% endblock contenido %}

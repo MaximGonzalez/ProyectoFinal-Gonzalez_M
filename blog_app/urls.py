@@ -9,9 +9,9 @@ urlpatterns = [
     path("usuarios/", views.usuarios, name="usuarios"),
     path("post/", views.post, name="post"),
     path("crearpost/", views.crear_post, name="crear_post"),
-    path("post/<int:post_id>/", views.post_detalle, name="post_detalle"),
-    path("post/<int:post_id>/borrar", views.borrar_post, name="borrar_post"),
+    path("<int:post_id>/", views.post_detalle, name="post_detalle"),
+    path("post/<int:post_id>/borrar/", views.borrar_post, name="borrar_post"),
+    path("post/<int:post_id>/editar/", views.post_editar, name="post_editar"),
     path("buscarposteos/", views.buscar_posteo, name="buscar_posteos"),
-    #path("crearocomentario/", views.crear_comentario, name="crear_comentario"),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

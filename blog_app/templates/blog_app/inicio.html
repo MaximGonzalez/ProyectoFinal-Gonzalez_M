@@ -5,16 +5,27 @@
 
 {% block posteos %}
     <main class="container py-5">
-        {% for post in posteos reversed %}
-        <section class="card cad-body">
-                        <li>
-                            {{post.titulo}}
-                            {{post.contenido|safe}}
-                            Autor: {{post.usuario}} - {{post.fecha_publicacion}}
-                        </li>
-                    {% empty %}
-                    <h1 class="text-center">No se encontraron entradas.</h1>
-        </section>
-        {% endfor %}
-    </main>
+        <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                {% for post in posteos reversed %}
+                <div class="card" style="width: 40rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">{{post.titulo}}</h5>
+                    <p class="card-text">Autor: {{post.usuario}} - {{post.fecha_publicacion}}</p>
+                    <a href="{% url 'post_detalle'  post.id %}" class="btn btn-primary">Ver mas</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-sm-6">
+                <div class="card" style="width: 20rem; height: 15rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">Acerca de:</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+        </div>
 {% endblock %}

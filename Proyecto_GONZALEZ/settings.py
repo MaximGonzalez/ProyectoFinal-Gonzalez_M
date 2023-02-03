@@ -130,3 +130,24 @@ LOGIN_URL = '/signin/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CKEDITOR_CONFIGS = {
+    'coment_ckeditor': {
+        "removePlugins": "stylesheetparser",
+        'toolbar': 'Basic',
+        'height': 100,
+        'width': 1290,
+    },
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Styles', 'Format', 'Font', 'FontSize', '-','Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', 'TextColor', 'BGColor','-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'Iframe'],
+            ['RemoveFormat', 'Source']
+        ],
+        'height': 300,
+        'width': 1290,
+        "removePlugins": "stylesheetparser",
+    }
+}

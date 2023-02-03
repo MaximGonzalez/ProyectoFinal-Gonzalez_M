@@ -3,35 +3,51 @@
 
 
 {% block contenido %}
-<table class="table">
-    <tbody>
-        <tr>
-            <th>Titulo</th>
-            <th>Fecha</th>
-            <td></td>
-        </tr>
-        {% for posteos in post reversed %}
-        <tr>
-            <td>
-                <a href="{% url 'post_detalle' post_id=posteos.id %}">
-                    Titulo: {{posteos.titulo}}
+<main class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1 mt-5">
+            <ul class="list-group">
+                <a>
+                <a class="group-item" href="{% url 'crear_post' %}">Crear nuevo post</a>
                 </a>
-            </td>
-            <td>
-                {{posteos.fecha_publicacion}}
-            </td>
-            <td>
-                <form action="{% url 'borrar_post' post_id=posteos.id %}" method="POST">
-                    {% csrf_token %}
-                    <input type="submit" value="eliminar"/>
-                </form
-            </td>
-            <td>
-                {% empty %}
-                <h1 class="text-center">No se encontraron entradas.</h1>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            </ul>
+            <section class="card cad-body">
+                <h1 class="text-center display-3">Mis post</h1>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Titulo</th>
+                            <th>Fecha</th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        {% for posteos in post reversed %}
+                        <tr>
+                            <td>
+                                {{posteos.titulo}}
+                            </td>
+                            <td>
+                                {{posteos.fecha_publicacion}}
+                            </td>
+                            <td>
+                                <form action="{% url 'post_editar' post_id=posteos.id %}" method="GET">
+                                    <input type="submit" value="Editar"/>
+                                </form
+                            </td>
+                            <td>
+                                <form action="{% url 'borrar_post' post_id=posteos.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="submit" value="eliminar"/>
+                                </form
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <h1 class="text-center">No se encontraron entradas.</h1>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+</main>
 {% endblock contenido %}
