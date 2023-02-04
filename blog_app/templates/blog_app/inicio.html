@@ -9,7 +9,9 @@
             <div class="col-sm-6 mb-3 mb-sm-0">
                 {% for post in posteos reversed %}
                 <div class="card" style="width: 40rem;">
-                    <img src="..." class="card-img-top" alt="...">
+                    {% if post.imagen %}
+                    <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" style="width: 50px; height: auto;">
+                    {% endif %}
                     <div class="card-body">
                     <h5 class="card-title">{{post.titulo}}</h5>
                     <p class="card-text">Autor: {{post.usuario}} - {{post.fecha_publicacion}}</p>
@@ -29,3 +31,4 @@
               </div>
         </div>
 {% endblock %}
+<img src="" alt="">

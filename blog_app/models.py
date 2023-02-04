@@ -9,7 +9,7 @@ class Post(models.Model):
     contenido = RichTextField(blank=True, null=True, config_name='default')
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    imagen = models.ImageField(upload_to='avatares', null=True, blank=True)
+    imagen = models.ImageField(upload_to='portadas', null=True, blank=True)
 
     def __str__(self):
         return f"{self.titulo} | De: {self.usuario}"

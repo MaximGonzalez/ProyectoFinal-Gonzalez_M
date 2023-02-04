@@ -7,7 +7,7 @@
         <h1 class="text-center display-3">Crear post</h1>
         <section class="card cad-body">
             {{error}}
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div>
                         <h5 class="te">Titulo</h5>
@@ -16,6 +16,7 @@
                     <div>
                         {{form.contenido}}
                         {{form.media}}
+                        <h6>Imagen de portada</h6>{{form.imagen}}
                     </div>
                     <button class="btn btn-outline-success">
                         Crear

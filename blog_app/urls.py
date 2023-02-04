@@ -6,7 +6,6 @@ from blog_app import views
 
 urlpatterns = [
     path("", views.inicio, name="inicio"),
-    path("usuarios/", views.usuarios, name="usuarios"),
     path("post/", views.post, name="post"),
     path("crearpost/", views.crear_post, name="crear_post"),
     path("<int:post_id>/", views.post_detalle, name="post_detalle"),
@@ -14,4 +13,7 @@ urlpatterns = [
     path("post/<int:post_id>/editar/", views.post_editar, name="post_editar"),
     path("buscarposteos/", views.buscar_posteo, name="buscar_posteos"),
 
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,22 +5,25 @@
 {% block contenido %}
 <main class="container py-5">
     <section class="card cad-body">
-        <h1 class="text-center">{{original.titulo}}</h1>
+        <p>Bienvenido <b>{{object.username}}</b></p>
+        <h4><b>Apelliodo:</b>{{object.last_name}}</h4>
+        <h4><b>Nombre:</b>{{object.first_name}}</h4>
+        <h4><b>E-Mail:</b>{{object.email}}</h4>
     </section>
     <section class="card cad-body">
         <div>
-            <ul>
+            <ul> <h4>Editar usuario</h4>
                 <h1 class="text-center"> {{error}} </h1>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{form_edit.as_p}}
-                    {{form_edit.media}}
-                    <button>
-                        Update
-                    </button>
+                    {{form.as_p}}
+                    <input type="submit" value="Guardar" >
                 </form>
             </ul>
         </div>
     </section>
 </main>
 {% endblock contenido %}
+
+
+

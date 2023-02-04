@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.db import models
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
-from blog_app.models import Post, Comentario
+from blog_app.models import Post
 from blog_app.forms import Crear_post_form, Crear_comentario_form
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView
+
 
 # Create your views here.
 
@@ -19,11 +23,11 @@ def inicio(request):
     )
 
 @login_required
-def usuarios(request):
+def usuario(request):
     contexto = {'users': User.objects.all()}
     return render(
         request=request,
-        template_name='blog_app/usuarios.html',
+        template_name='blog_app/usuario.html',
         context=contexto,
     )
 
@@ -47,7 +51,8 @@ def crear_post(request):
             })
     else:
         try:
-            form = Crear_post_form(request.POST)
+            print(request.POST)
+            form = Crear_post_form(request.POST, request.FILES)
             nuevo_post = form.save(commit=False)
             nuevo_post.usuario = request.user
             nuevo_post.save()
@@ -68,8 +73,9 @@ def post_editar(request, post_id):
         return render(request, 'blog_app/post_editar.html', {'original':original, 'form_edit':form_edit})
     else:
         try:
+            print(request.POST)
             original = get_object_or_404(Post, pk=post_id, usuario=request.user)
-            form_edit = Crear_post_form(request.POST, instance=original)
+            form_edit = Crear_post_form(request.POST, request.FILES, instance=original)
             form_edit.save()
             return redirect('post')
         except ValueError:
@@ -80,7 +86,7 @@ def post_editar(request, post_id):
             })
 
 
-@login_required
+
 def post_detalle(request, post_id):
     comentarios = []
     if request.method == 'GET':
@@ -129,4 +135,8 @@ def borrar_post(request, post_id):
     if request.method == 'POST':
         borrar.delete()
         return redirect('post')
+
+
+
+
 

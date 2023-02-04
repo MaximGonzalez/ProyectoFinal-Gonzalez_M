@@ -9,6 +9,12 @@
             Vista Post detalle
         </h1>
     </section>
+    <section>
+        {% if posteo.imagen %}
+        <h4>Imagen de portada</h4>
+        <img src="{{ posteo.imagen.url }}" alt="{{ posteo.titulo }}" style="width: 200px; height: auto;">
+        {% endif %}
+    </section>
     <section class="card cad-body">
         <div>
         <h1 class="text-center"> {{error}} </h1>

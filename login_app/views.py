@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse, reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView
+from login_app.forms import UserUpdateForm
 
 # Create your views here.
 
@@ -54,3 +58,14 @@ def signin_user(request):
         else:
             login(request, user)
             return redirect('/')
+
+
+
+class ProfileEditView(LoginRequiredMixin, UpdateView):
+    model_class = User
+    form_class = UserUpdateForm
+    success_url = reverse_lazy('inicio')
+    template_name = 'login_app/usuario.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
