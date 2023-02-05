@@ -2,6 +2,7 @@ from django.contrib import admin, staticfiles
 from django.urls import path, include
 from .views import *
 
+
 urlpatterns = [
     path("signup/", signup_user, name="signup_user"),
     path("logout/", signout_user, name="signout_user"),

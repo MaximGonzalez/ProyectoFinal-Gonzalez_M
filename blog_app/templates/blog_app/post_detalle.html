@@ -25,6 +25,7 @@
         </li>
         </div>
     </section>
+    {% if user.is_authenticated %}
     <section class="card cad-body">
         <h3>Deja tu comentario</h3>
         <form method="POST">
@@ -36,6 +37,7 @@
             </button>
         </form>
     </section>
+    {% endif %}
     <section class="card cad-body">
         {% for comentario in comentarios reversed %}
             <section class="card cad-body">

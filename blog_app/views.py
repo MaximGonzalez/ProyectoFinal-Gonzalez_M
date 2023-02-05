@@ -2,12 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from blog_app.models import Post
 from blog_app.forms import Crear_post_form, Crear_comentario_form
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView
+
 
 
 # Create your views here.
@@ -22,14 +21,6 @@ def inicio(request):
         context=contexto,
     )
 
-@login_required
-def usuario(request):
-    contexto = {'users': User.objects.all()}
-    return render(
-        request=request,
-        template_name='blog_app/usuario.html',
-        context=contexto,
-    )
 
 @login_required
 def post(request):
@@ -56,7 +47,7 @@ def crear_post(request):
             nuevo_post = form.save(commit=False)
             nuevo_post.usuario = request.user
             nuevo_post.save()
-            return redirect('/')
+            return redirect('post')
         except ValueError:
             return render(
             request, 'blog_app/crear_post.html', {
@@ -138,5 +129,8 @@ def borrar_post(request, post_id):
 
 
 
-
-
+def about(request):
+    return render(
+        request=request,
+        template_name='blog_app/about.html',
+    )

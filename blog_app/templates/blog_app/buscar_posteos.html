@@ -3,17 +3,23 @@
 
 {% block posteos %}
 <main class="container py-5">
+    <h1><center>{{mensaje}}</center></h1>
+    {% for post in posteos reversed %}
     <section class="card cad-body">
-        <h1 class="mt-4"><center>{{mensaje}}</center></h1>
-        {% for post in posteos reversed %}
+        {% if post.imagen %}
+        <h4>Imagen de portada</h4>
+        <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" style="width: 200px; height: auto;">
+        {% endif %}
+    </section>
+    <section class="card cad-body">
         <hr class="divider" />
             <tr>
-                <td>{{post.titulo}}<br>
+                <td><h1>{{post.titulo}}</h1>
                     {{post.contenido|safe}}<br>
                     Autor: {{post.usuario}} - {{post.fecha_publicacion}}
                 </td>
             </tr>
-        {% endfor %}
     </section>
+    {% endfor %}
 </main>
 {% endblock posteos %}
